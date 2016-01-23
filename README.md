@@ -1,6 +1,7 @@
 # Search-the-RDF-Triple-in-Database
-正如名字，这个JAVA应用是一个GUI Application，用来根据RDF的Subject查询RDF三元组。
-特点：
+正如名字，这个JAVA应用是一个GUI Application，用来根据RDF的Subject查询RDF三元组。  
+特点：  
+
 1.它是多线程和GUI的
 2.现在可以直接输入Subject查询，或者是选择一个输入文件或文件夹。
 3.查询结果将显示在程序中，并保存在用户指定的一个文件（文件夹）中。
