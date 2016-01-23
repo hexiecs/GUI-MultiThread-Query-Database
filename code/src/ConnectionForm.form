@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ConnectionForm">
+  <grid id="27dc6" binding="Panel1" layout-manager="GridLayoutManager" row-count="7" column-count="13" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="14" y="-5" width="476" height="364"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="f5906" class="javax.swing.JLabel" binding="TopLabel">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="13" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="查询数据库"/>
+        </properties>
+      </component>
+      <component id="2e24f" class="javax.swing.JLabel" binding="Subject">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="在文本框中输入查询内容"/>
+        </properties>
+      </component>
+      <component id="1ecab" class="javax.swing.JLabel" binding="Path">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="11" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="在右侧选择输入文件（文件夹）的位置并保存"/>
+        </properties>
+      </component>
+      <component id="545bf" class="javax.swing.JTextField" binding="tfSubjectContent">
+        <constraints>
+          <grid row="1" column="4" row-span="1" col-span="7" vsize-policy="0" hsize-policy="7" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value=" "/>
+        </properties>
+      </component>
+      <component id="6ab56" class="javax.swing.JButton" binding="SubjectOK">
+        <constraints>
+          <grid row="1" column="11" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="查询并保存"/>
+        </properties>
+      </component>
+      <component id="1af8b" class="javax.swing.JButton" binding="FileOK">
+        <constraints>
+          <grid row="2" column="11" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="选择查询路径并保存"/>
+        </properties>
+      </component>
+      <scrollpane id="ea8e" binding="scrollPane">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="12" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children/>
+      </scrollpane>
+      <component id="da10c" class="javax.swing.JButton" binding="Clear">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="12" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="清空"/>
+        </properties>
+      </component>
+      <component id="9096a" class="javax.swing.JComboBox" binding="combo">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <model/>
+          <toolTipText value="选择文件"/>
+        </properties>
+      </component>
+      <component id="8b60e" class="javax.swing.JLabel" binding="查询结果">
+        <constraints>
+          <grid row="3" column="6" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="52" height="27"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value=" 查询结果"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>
