@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
+import java.sql.*;
 import com.mysql.jdbc.PreparedStatement;
 
 /**
@@ -19,6 +19,8 @@ public class login extends JFrame {
     public JButton Login;
     public JPanel Panel2;
     public JTextField Port;
+    static PreparedStatement ps = null;
+    static ResultSet rs = null;
 
     public login() {
         this.setTitle("login");
@@ -48,7 +50,7 @@ public class login extends JFrame {
                     JOptionPane.showMessageDialog(null, "连接数据库错误", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-              //  System.out.println(passwd);
+                //  System.out.println(passwd);
                 try {
                     ConnectionForm.conn = DriverManager.getConnection(url);
                 } catch (SQLException sqe) {
@@ -56,14 +58,23 @@ public class login extends JFrame {
                     return;
                 }
                 JOptionPane.showMessageDialog(null, "成功加载MySQL驱动程序", "Success", JOptionPane.PLAIN_MESSAGE);
-
+                String sql = "show tables;";
+                try {
+                    ps = (PreparedStatement) ConnectionForm.conn.prepareStatement(sql);
+                    rs = ps.executeQuery();
+                    while (rs.next()) {
+                        ConnectionForm.tables.add(rs.getString(1));
+                    }
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
                 new ConnectionForm();
             }
         });
     }
 
     public static void main(String[] args) {
-new login();
+        new login();
     }
 
     {

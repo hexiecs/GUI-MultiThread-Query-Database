@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,7 +48,8 @@ public class ConnectionForm extends JFrame {
     public static Vector<Vector<Object>> data;
     public JTable jt;
     public ExecutorService threadPool;  //线程池，加快多线程的速度
-    final int DataBaseNum = 1;//根据数据库的表的数目更改，决定了开的线程的数目
+    final int DataBaseNum = 31;//根据数据库的表的数目更改，决定了开的线程的数目
+    static List<String> tables = new ArrayList<String>();
 
     public ConnectionForm() {
         //以下为文件名过滤器
@@ -143,10 +145,10 @@ public class ConnectionForm extends JFrame {
                                                 try {
                                                     FileWriter fw = new FileWriter(dir);//分析结果存储
                                                     BufferedWriter bw = new BufferedWriter(fw);
-                                                    CountDownLatch threadsignal = new CountDownLatch(DataBaseNum);//为了在一个subject的所有thread查询完之后再开始下一个subject的查询，不然下一个subject的thread会干扰当前subject
-                                                    for (int j = 1; j <= DataBaseNum; j++) {
+                                                    CountDownLatch threadsignal = new CountDownLatch(tables.size());//为了在一个subject的所有thread查询完之后再开始下一个subject的查询，不然下一个subject的thread会干扰当前subject
+                                                    for (String tblName : tables) {
                                                         String indexname = pre;
-                                                        threadPool.execute(new mythread(bw, j, indexname, threadsignal));//多线程查询
+                                                        threadPool.execute(new mythread(bw, tblName, indexname, threadsignal));//多线程查询
 
                                                     }
 
@@ -159,11 +161,7 @@ public class ConnectionForm extends JFrame {
                                                 }
                                                 jt = new JTable(data, o1);//在下方显示成表格形式
                                                 scrollPane.setViewportView(jt);
-                                                try {
-                                                    conn.close();
-                                                } catch (SQLException e2) {
-                                                    JOptionPane.showMessageDialog(null, "MYSQL关闭错误", "Error", JOptionPane.ERROR_MESSAGE);
-                                                }
+
                                                 // System.out.println(SubjectContent);
                                                 JOptionPane.showMessageDialog(null, "成功!", "Success", JOptionPane.PLAIN_MESSAGE);
 
@@ -236,10 +234,11 @@ public class ConnectionForm extends JFrame {
 
                                     while (pre != null) {
                                         BufferedWriter bw = new BufferedWriter(fw);
-                                        CountDownLatch threadsignal = new CountDownLatch(DataBaseNum);
-                                        for (int j = 1; j <= DataBaseNum; j++) {
+                                        CountDownLatch threadsignal = new CountDownLatch(tables.size());
+                                        for (String tblName : tables) {
                                             String indexname = pre;
-                                            threadPool.execute(new mythread(bw, j, indexname, threadsignal));
+                                            threadPool.execute(new mythread(bw, tblName, indexname, threadsignal));//多线程查询
+
                                         }
                                         threadsignal.await();
                                         res.clear();
@@ -275,10 +274,10 @@ public class ConnectionForm extends JFrame {
                                 //分析结果存储
                                 while (pre != null) {
                                     BufferedWriter bw = new BufferedWriter(fw);
-                                    CountDownLatch threadsignal = new CountDownLatch(DataBaseNum);
-                                    for (int j = 1; j <= DataBaseNum; j++) {
+                                    CountDownLatch threadsignal = new CountDownLatch(tables.size());
+                                    for (String tblName : tables) {
                                         String indexname = pre;
-                                        threadPool.execute(new mythread(bw, j, indexname, threadsignal));
+                                        threadPool.execute(new mythread(bw, tblName, indexname, threadsignal));//多线程查询
 
                                     }
                                     threadsignal.await();
@@ -286,7 +285,7 @@ public class ConnectionForm extends JFrame {
                                     pre = br.readLine();
                                 }
                             } catch (FileNotFoundException fnf) {
-                                JOptionPane.showMessageDialog(null, "找不到文件2", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "找不到文件", "Error", JOptionPane.ERROR_MESSAGE);
                             } catch (IOException ioe) {
                                 JOptionPane.showMessageDialog(null, "IO错误", "Error", JOptionPane.ERROR_MESSAGE);
 
@@ -316,7 +315,7 @@ public class ConnectionForm extends JFrame {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     String SelectFile = (String) e.getItem();//得到选择的文件
-                 //   System.out.println(SelectFile);
+                    //   System.out.println(SelectFile);
 
                     String path;
                     if (file2.isDirectory())
@@ -346,7 +345,7 @@ public class ConnectionForm extends JFrame {
                         jt = new JTable(data, o1);
                         scrollPane.setViewportView(jt);
                     } catch (FileNotFoundException fnf) {
-                        JOptionPane.showMessageDialog(null, "找不到文件3", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "找不到文件", "Error", JOptionPane.ERROR_MESSAGE);
                     } catch (IOException ioe) {
                         JOptionPane.showMessageDialog(null, "读文件出错", "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -423,18 +422,19 @@ class mythread implements  Runnable {//线程类
     String indexname;
     PreparedStatement pstmt;
     ResultSet rset;
+    String tblname;
     private CountDownLatch threadsignal;
     private static  String sn=new String();
-    public mythread(BufferedWriter bw,int id,String indexname,CountDownLatch threadsignal){
+    public mythread(BufferedWriter bw,String tblname,String indexname,CountDownLatch threadsignal){
         this.bw=bw;
-        this.id=id;
+        this.tblname=tblname;
         this.indexname=indexname;
         this.threadsignal=threadsignal;
 
     }
     public void run() {
         try {
-            String sql = "SELECT * from btc" + id + " where subject='<" + indexname + ">'";
+            String sql = "SELECT * from "+tblname+" where subject='<" + indexname + ">'";
             pstmt = (PreparedStatement) ConnectionForm.conn.prepareStatement(sql);
             rset = pstmt.executeQuery();
             while (rset.next()) {
