@@ -42,7 +42,7 @@ public class login extends JFrame {
                 char[] cs = password.getPassword();
                 String passwd = new String(cs);
                 String port = Port.getText().trim();
-                String url = "jdbc:mysql://localhost:" + port + "/" + databasename + "?"
+                String url = "jdbc:mysql://"+ port + "/" + databasename + "?"
                         + "user=" + username + "&password=" + passwd + "&useUnicode=true&characterEncoding=UTF8";
                 try {
                     Class.forName("com.mysql.jdbc.Driver");// 动态加载mysql驱动
